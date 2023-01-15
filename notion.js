@@ -75,6 +75,9 @@ function createAssignmentPage(assignmentName, dueDate, doOn) {
                 select: {
                     id: doOnID
                 }
+            },
+            [process.env.NOTION_TIME]: {
+                number: 1
             }
         }
     })
