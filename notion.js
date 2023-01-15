@@ -16,7 +16,7 @@ async function getTags() {
 getTags();
 
 
-function createAssignmentPage(assignmentName, dueDate, doOn) {
+export function createAssignmentPage(assignmentName, dueDate, doOn) {
     let doOnID;
     switch (doOn) {
         case 'sunday':
