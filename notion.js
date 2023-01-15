@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { Client } = require('@notionhq/client'); 
+const { Client } = require('@notionhq/client');
 const { get } = require('http');
 const { text } = require('stream/consumers');
 
@@ -11,14 +11,17 @@ async function getTags() {
     const database = await notion.databases.retrieve({
         database_id: process.env.NOTION_DATABASE_ID
     });
-    console.log(database.properties.Class.select.options); 
+    console.log(database.properties.Class.select.options);
 }
-getTags(); 
+getTags();
 
 
-function createAssignmentPage(assignmentName, dueDate) {
-    let doOnID;
-    switch (doOn) {
+function createAssignmentPage(assignmentName, dueDate, dueOn) {
+    let dueOnID;
+    switch (dueOn) {
+        case undefined:
+            doOnID = '5db70016-5c7c-4632-8dee-5e9e50ea3ec2';
+            break;
         case 'sunday':
             doOnID = "4abf0d3f-c2df-4fb2-b927-0fa3ff3ef3fc";
             break;
@@ -37,12 +40,14 @@ function createAssignmentPage(assignmentName, dueDate) {
         case 'friday':
             doOnID = "8ee50ea7-275e-4ec6-af32-004b9316a83e";
             break;
-        case 'sauterday':
+        case 'saturday':
             doOnID = "10389cf8-6a01-43ee-9d88-8336eab6c3ca";
             break;
         default:
-            doOnID = null;
-    
+            doOnID = '5db70016-5c7c-4632-8dee-5e9e50ea3ec2';
+    }
+
+    console.log(doOnID);
 
     notion.pages.create({
         parent: {
@@ -52,7 +57,7 @@ function createAssignmentPage(assignmentName, dueDate) {
             [process.env.NOTION_NAME]: {
                 title: [
                     {
-                        type: 'text', 
+                        type: 'text',
                         text: {
                             content: assignmentName
                         }
@@ -73,4 +78,4 @@ function createAssignmentPage(assignmentName, dueDate) {
     })
 }
 
-createAssignmentPage('testing', '2023-01-10');
+createAssignmentPage('TESTING!!!', '2022-01-10', 'monday');
