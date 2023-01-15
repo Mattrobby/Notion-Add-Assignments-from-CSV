@@ -16,12 +16,9 @@ async function getTags() {
 getTags();
 
 
-function createAssignmentPage(assignmentName, dueDate, dueOn) {
-    let dueOnID;
-    switch (dueOn) {
-        case undefined:
-            doOnID = '5db70016-5c7c-4632-8dee-5e9e50ea3ec2';
-            break;
+function createAssignmentPage(assignmentName, dueDate, doOn) {
+    let doOnID;
+    switch (doOn) {
         case 'sunday':
             doOnID = "4abf0d3f-c2df-4fb2-b927-0fa3ff3ef3fc";
             break;
@@ -73,9 +70,22 @@ function createAssignmentPage(assignmentName, dueDate, dueOn) {
                 select: {
                     id: '?B::'
                 }
+            },
+            [process.env.NOTION_DO_ON]: {
+                select: {
+                    id: doOnID
+                }
             }
         }
     })
 }
 
-createAssignmentPage('TESTING!!!', '2022-01-10', 'monday');
+createAssignmentPage('TESTING!!!', '2022-01-01', 'monday');
+createAssignmentPage('TESTING!!!', '2022-01-02', 'tuesday');
+createAssignmentPage('TESTING!!!', '2022-01-03', 'wednesday');
+createAssignmentPage('TESTING!!!', '2022-01-04', 'thursday');
+createAssignmentPage('TESTING!!!', '2022-01-05', 'friday');
+createAssignmentPage('TESTING!!!', '2022-01-06', 'saturday');
+createAssignmentPage('TESTING!!!', '2022-01-07', 'sunday');
+createAssignmentPage('TESTING!!!', '2022-01-08', null);
+createAssignmentPage('TESTING!!!', '2022-01-09');
