@@ -7,16 +7,17 @@ const notion = new Client({
     auth: process.env.NOTION_API_KEY,
 })
 
-async function getTags() {
+// Gets the IDs in Notion database you you can apply them below
+async function getIDs() {
     const database = await notion.databases.retrieve({
         database_id: process.env.NOTION_DATABASE_ID
     });
-    console.log(database.properties.Class.select.options);
 }
-getTags();
 
+// Creates the Page in the Notion database 
+module.exports = function createAssignmentPage(assignmentName, dueDate, doOn, assignmentType) {
 
-export function createAssignmentPage(assignmentName, dueDate, doOn) {
+    // Figures out what ID to use given the day of the week
     let doOnID;
     switch (doOn) {
         case 'sunday':
@@ -44,9 +45,31 @@ export function createAssignmentPage(assignmentName, dueDate, doOn) {
             doOnID = '5db70016-5c7c-4632-8dee-5e9e50ea3ec2';
     }
 
-    console.log(doOnID);
+    let emoji; 
+    let url; 
+    switch (assignmentType) {
+        case 'homework':
+            emoji = '✏'; 
+            url = 'https://images.unsplash.com/photo-1560785496-3c9d27877182?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&w=6000'
+            break;
+        case 'reading':
+            emoji = '📖';
+            url = 'https://images.unsplash.com/photo-1553729784-e91953dec042?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=6000'; 
+            
+    }
+
 
     notion.pages.create({
+        cover: {
+            type: 'external',
+            external: {
+                url: url
+            }
+        },
+        icon: {
+            type: "emoji", 
+            emoji: emoji
+        },
         parent: {
             database_id: process.env.NOTION_DATABASE_ID
         },
@@ -82,13 +105,3 @@ export function createAssignmentPage(assignmentName, dueDate, doOn) {
         }
     })
 }
-
-createAssignmentPage('TESTING!!!', '2022-01-01', 'monday');
-createAssignmentPage('TESTING!!!', '2022-01-02', 'tuesday');
-createAssignmentPage('TESTING!!!', '2022-01-03', 'wednesday');
-createAssignmentPage('TESTING!!!', '2022-01-04', 'thursday');
-createAssignmentPage('TESTING!!!', '2022-01-05', 'friday');
-createAssignmentPage('TESTING!!!', '2022-01-06', 'saturday');
-createAssignmentPage('TESTING!!!', '2022-01-07', 'sunday');
-createAssignmentPage('TESTING!!!', '2022-01-08', null);
-createAssignmentPage('TESTING!!!', '2022-01-09');
